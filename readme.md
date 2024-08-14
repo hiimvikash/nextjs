@@ -106,6 +106,12 @@ export default function ErrorBoundary({
     - `Not SEO optimized.` Reliance on JavaScript for rendering content on the client side can significantly hurt SEO, as search engines might struggle to index the content properly.
     - `Waterfall model.` The user experience can suffer from slow load times, as the browser has to download, parse, and execute JavaScript before the user sees any meaningful content on the page
 ## Rendering in Next.js - Solution to CSR.
+![image](https://github.com/user-attachments/assets/b843ca98-6f6b-43d6-bb0d-db87677cf71a)
+### Hydration
+- During hydration, React takes control in the browser, reconstructing the component tree in memory based on the static HTML that was served
+- It carefully plans the placement of interactive elements within this tree. Then, React proceeds to bind the necessary JavaScript logic to these elements
+- This involves initializing the application state, attaching event handlers for actions such as clicks and mouseovers, and setting up any other dynamic functionalities required for a fully interactive user experience
+
 
 
 
