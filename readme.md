@@ -139,8 +139,10 @@ Server-Side Rendering (SSR) was a significant improvement over Client-Side Rende
 3. All components have to be hydrated before they become interactive.
 ### Solution to above drawbacks of SSR.
 - **You don't have to fetch everything before you can show anything.**
+    - ![image](https://github.com/user-attachments/assets/3731dc4d-a682-4fad-89a1-b34f735ec4da)
     - If a particular section delays the initial HTML, it can be seamlessly integrated into
 the stream later `<Suspense fallback={<Spinner/>}>  <MainContent/>    </Suspense>`.
+
 
 
 
