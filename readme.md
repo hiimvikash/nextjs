@@ -64,3 +64,16 @@ export default function ErrorBoundary({
   );
 }
 ```
+
+<hr/>
+<hr/>
+<hr/>
+<hr/>
+<hr/>
+<hr/>
+<hr/>
+<hr/>
+
+# Rendering in Next.js
+
+## Rendering in React.js
