@@ -96,7 +96,8 @@ export default function ErrorBoundary({
 # Rendering in Next.js
 
 ## Rendering in React.js
-![image](https://github.com/user-attachments/assets/182d5781-54d7-4faf-8117-e303c8ff632b)
+![image](https://github.com/user-attachments/assets/1389bcc9-6712-425e-ad28-ed583c1d47a1)
+
 
 
 
