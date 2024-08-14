@@ -138,16 +138,22 @@ Server-Side Rendering (SSR) was a significant improvement over Client-Side Rende
 2. The JavaScript required for the components needs to be fully loaded on the client side before the hydration process can start.
 3. All components have to be hydrated before they become interactive.
 ### Solution to above drawbacks of SSR.
-- **You have to fetch everything before you can show anything.**
+[blog link](https://blog.saeloun.com/2022/01/20/new-suspense-ssr-architecture-in-react-18/) 
+1. **You have to fetch everything before you can show anything.**
     - ![image](https://github.com/user-attachments/assets/3731dc4d-a682-4fad-89a1-b34f735ec4da)
     - If a particular section delays the initial HTML, it can be seamlessly integrated into the stream later.
     - When the data for the MAIN CONTENT is ready on the server, React will send additional HTML into the same stream, along with the `<script>` tag to put that HTML in the ‘right place’.
 
 
-- **We know that all the JavaScript code needs to load before starting to hydrate. Again, our <MainContent> component has a lot of complex JavaScript logic involved, it would take some time to load. Even though the JS code for NavBar, SideBar, Header is loaded, hydration cannot start.**
+2. **We know that all the JavaScript code needs to load before starting to hydrate. Again, our <MainContent> component has a lot of complex JavaScript logic involved, it would take some time to load. Even though the JS code for NavBar, SideBar, Header is loaded, hydration cannot start.**
     - Using `React.lazy` for code splitting enables you to separate the main section's code from the primary JavaScript bundle The JavaScript containing React and the code for the entire application, excluding the main section, can now be downloaded independently by the client without having to wait for the main section's code.
     - By wrapping `<MainContent>` in `<Suspense>`, we not only tell React to unblock the rest of the page from streaming but also from hydrating! This is called ‘Selective Hydration’. Thanks to Selective Hydration, a heavy piece of JS doesn’t prevent the rest of the page from becoming interactive.
     - ![image](https://github.com/user-attachments/assets/ebf0f051-bea0-4e16-ad9e-7a396c278bec)
+
+3. **Hydrate everything before interacting with anything**
+    - Suppose, we have multiple components wrapped in `<Suspense>`.
+    - React will attempt to hydrate both of them, starting with the Suspense boundary that it finds earlier in the tree ( SideBar in this case ).
+    - Let’s say the user starts interacting with the `<MainContent>` section, for which the code is also loaded. In this case, React will prioritize hydrating the `<MainContent>` assuming it to be more urgent and makes the `<MainContent>` section interactive. After that, it will continue hydrating the Sidebar.
 
 
 
