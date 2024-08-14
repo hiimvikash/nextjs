@@ -112,7 +112,31 @@ export default function ErrorBoundary({
 - It carefully plans the placement of interactive elements within this tree. Then, React proceeds to bind the necessary JavaScript logic to these elements
 - This involves initializing the application state, attaching event handlers for actions such as clicks and mouseovers, and setting up any other dynamic functionalities required for a fully interactive user experience
 
+### Server Side Solutions
 
+1. Static Site Generation (SSG)
+    - SSG occurs at build time, when the application is deployed on the server. This results in pages that are already rendered and ready to serve. It is ideal for content that doesn't change often, like blog posts.
+2. Server-Side Rendering (SSR)
+    - SSR, on the other hand, renders pages on-demand in response to user requests. It is suitable for personalized content like social media feeds, where the HTML depends on the logged-in user.
+
+Server-Side Rendering (SSR) was a significant improvement over Client-Side Rendering (CSR), providing faster initial page loads and better SEO.
+
+### Drawbacks of SSR
+1. **You have to fetch everything before you can show anything.**
+    - Components cannot start rendering and then pause or "wait" while data is still being loaded.
+    - If a component needs to fetch data from a database or another source (like an API), this fetching must be completed before the server can begin rendering the page.
+    - This can delay the server's response time to the browser, as the server must finish collecting all necessary data before any part of the page can be sent to the client.
+2. **You have to load everything before you can hydrate anything.**
+    - For successful hydration, where React adds interactivity to the server-rendered HTML, the component tree in the browser must exactly match the server-generated component tree.
+    - This means that all the JavaScript for the components must be loaded on the client before you can start hydrating any of them.
+3. **You have to hydrate everything before you can interact with anything.**
+    - React hydrates the component tree in a single pass, meaning once it starts hydrating, it won't stop until it's finished with the entire tree,
+    - As a consequence, all components must be hydrated before you can interact with any of them.
+
+`summary :-`
+1. Data fetching must be completed before the server can begin rendering HTML.
+2. The JavaScript required for the components needs to be fully loaded on the client side before the hydration process can start.
+3. All components have to be hydrated before they become interactive.
 
 
 
