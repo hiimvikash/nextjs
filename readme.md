@@ -93,11 +93,10 @@ export default function ErrorBoundary({
 <hr/>
 <hr/>
 
-# Rendering in Next.js
+# Rendering
 
-## Rendering in React.js
+## Rendering in React.js - Client-side Rendering
 ![image](https://github.com/user-attachments/assets/1389bcc9-6712-425e-ad28-ed583c1d47a1)
-### Client-side Rendering :
 - This method of rendering, where the component code is transformed into a user interface directly within the browser (the client), is known as client-side rendering (CSR)
 - CSR quickly became the standard for SPAs, with widespread adoption
 - It wasn't long before developers began noticing some inherent drawbacks to this approach.
@@ -106,6 +105,7 @@ export default function ErrorBoundary({
     - No inbuilt routing.
     - `Not SEO optimized.` Reliance on JavaScript for rendering content on the client side can significantly hurt SEO, as search engines might struggle to index the content properly.
     - `Waterfall model.` The user experience can suffer from slow load times, as the browser has to download, parse, and execute JavaScript before the user sees any meaningful content on the page
+## Rendering in Next.js - Solution to CSR.
 
 
 
