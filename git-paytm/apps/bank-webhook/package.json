@@ -1,0 +1,19 @@
+{
+  "name": "bank-webhook",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@repo/typescript-config": "*",
+    "@types/express": "^4.17.21",
+    "esbuild": "^0.23.1",
+    "express": "^4.19.2",
+    "@repo/db": "*"
+  }
+}
