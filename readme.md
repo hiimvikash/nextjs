@@ -954,8 +954,377 @@ export default async function ProductDetails({ params }: { params: Promise<{
 ---
 
 *Next topic: Nested dynamic routes and advanced routing patterns*
+# Nested Dynamic Routes in Next.js
+
+## Overview
+Nested dynamic routes allow you to handle multiple dynamic segments in your URL paths. This is essential for real-world applications where you need complex routing structures.
+
+## Scenario 5 Example
+**Goal**: Create a route structure to show:
+- Product details at: `/products/1`
+- Specific product review at: `/products/1/reviews/1`
+
+## Implementation Steps
+
+### 1. Folder Structure Setup
+To create nested dynamic routes, you need to create nested folders following this pattern:
+
+```
+app/
+├── products/
+│   └── [productId]/
+│       ├── page.tsx (for /products/1)
+│       └── reviews/
+│           └── [reviewId]/
+│               └── page.tsx (for /products/1/reviews/1)
+```
+
+### 2. Creating the Nested Structure
+1. **Start with existing dynamic product route**: `[productId]` folder already exists
+2. **Create reviews folder**: Inside `[productId]`, create a `reviews` folder
+3. **Add dynamic review ID**: Inside `reviews`, create `[reviewId]` folder
+4. **Add page component**: Create `page.tsx` inside `[reviewId]` folder
+
+### 3. Component Implementation
+
+```typescript
+// app/products/[productId]/reviews/[reviewId]/page.tsx
+
+export default async function ProductReview({
+  params
+}: {
+  params: Promise<{
+    productId: string;
+    reviewId: string;
+  }>
+}) {
+  const { productId, reviewId } = await params;
+  
+  return (
+    <div>
+      <h1>Review {reviewId} for Product {productId}</h1>
+    </div>
+  );
+}
+```
+
+## Key Concepts Explained
+
+### Route Parameters Structure
+- **params**: A Promise that resolves to an object containing all dynamic segments
+- **Type safety**: Define the expected structure with TypeScript
+- **Destructuring**: Extract `productId` and `reviewId` from the awaited params
+
+### URL to Route Mapping
+| URL | Folder Structure | Component |
+|-----|-----------------|-----------|
+| `/` | `app/page.tsx` | Root page |
+| `/products` | `app/products/page.tsx` | Products listing |
+| `/products/1` | `app/products/[productId]/page.tsx` | Product details |
+| `/products/1/reviews/1` | `app/products/[productId]/reviews/[reviewId]/page.tsx` | Specific review |
+
+## Testing Your Implementation
+
+1. Navigate to: `localhost:3000/products/1/reviews/1`
+   - Should display: "Review 1 for Product 1"
+
+2. Try different IDs: `localhost:3000/products/100/reviews/5`
+   - Should display: "Review 5 for Product 100"
+
+3. The IDs update dynamically based on the URL segments
+
+## Important Notes
+
+### File-Based Routing Logic
+- Each folder represents a URL segment
+- Square brackets `[]` indicate dynamic segments
+- Nested folders create nested routes
+- `page.tsx` files define the actual page components
+
+### Async/Await Pattern
+- `params` is a Promise in Next.js App Router
+- Always `await` params before destructuring
+- This ensures proper server-side rendering
+
+### Multiple Dynamic Segments
+- You can have as many dynamic segments as needed
+- Each dynamic segment becomes a property in the params object
+- Naming convention: folder name becomes the parameter key
+
+## Practice Exercise
+
+**Task**: Create a review listing page for each product
+- **Location**: Create `page.tsx` in the `reviews` folder (not in `[reviewId]`)
+- **Route**: This will handle `/products/1/reviews` (without specific review ID)
+- **Content**: Display a list of reviews for the product
+
+**Hint**: The component should access only the `productId` parameter and display multiple reviews.
+
+## Advanced Considerations
+
+### Route Priority
+- Static routes take priority over dynamic routes
+- More specific routes take priority over less specific ones
+- Nested structure follows the same priority rules
+
+### Error Handling
+- Consider adding error boundaries for invalid IDs
+- Implement loading states for async operations
+- Handle cases where products or reviews don't exist
+
+### SEO and Performance
+- Dynamic routes are fully SEO-friendly
+- Each route can have its own metadata
+- Consider implementing proper loading and error states
+---
+# Next.js Catchall Segments - YouTube Notes
+
+## Overview
+Catchall segments are a powerful Next.js routing concept that allows you to handle multiple URL segments with a single file, perfect for documentation sites and complex routing scenarios.
+
+## The Problem Scenario
+**Example**: Building a documentation site with:
+- Multiple features (5 features)
+- Each feature has multiple concepts (5 concepts each)
+- Need unique routes for each concept under its feature
+- URLs like: `localhost:3000/docs/feature1/concept1`, `docs/feature1/concept2`, etc.
+<img width="917" alt="image" src="https://github.com/user-attachments/assets/7d8a365e-7ddf-4c6c-8f44-ff04ee0faea1" />
 
 
+**Traditional Approach Issues**:
+- 20 features × 20 concepts = 400 different routes
+- Would require 400 separate files in Next.js file-system routing
+- Even with dynamic routing: still need multiple nested folder levels
+
+## Dynamic Routing Improvements
+- Use dynamic route folders with `[conceptId]` → reduces to 20 files
+- Make feature folder dynamic with `[featureId]` → down to just 2 folders
+- **Remaining issue**: Every new path segment requires another nesting level
+
+## Catchall Segments Solution
+Handles all route segments with just **one file** - perfect when all pages share the same layout but need different URL segments for organization and SEO.
+
+## Implementation Steps
+
+### 1. Folder Structure
+```
+app/
+  docs/
+    [...slug]/
+      page.tsx
+```
+
+### 2. Naming Convention
+- Use square brackets with three dots: `[...slug]`
+- Follow with a name (commonly "slug" for URLs)
+- The three dots work like the spread operator
+
+### 3. Basic Component Setup
+```typescript
+export default function Docs() {
+  return <h1>Docs Homepage</h1>
+}
+```
+
+### 4. Accessing URL Segments
+```typescript
+export default async function Docs({ params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug } = await params;
+  
+  if (slug && slug.length === 2) {
+    return <h1>Viewing docs for feature {slug[0]} and concept {slug[1]}</h1>
+  } else if (slug && slug.length === 1) {
+    return <h1>Viewing docs for feature {slug[0]}</h1>
+  }
+  
+  return <h1>Docs Homepage</h1>
+}
+```
+
+**Key Points**:
+- `params` is a Promise object that needs to be awaited
+- `slug` is an array of strings containing all URL segments
+- Component must be async when using await
+- Use conditional logic to handle different URL structures
+
+## How It Works
+The catchall route matches **any URL** with `/docs` in the path:
+- `/docs/routing` → shows feature page
+- `/docs/routing/catchall-segments` → shows feature + concept page  
+- `/docs/feature1/concept1/example1` → all handled by same file
+
+## Optional Catchall Segments
+**Problem**: Regular catchall doesn't match `/docs` alone (shows 404)
+
+**Solution**: Wrap folder name in extra square brackets
+```
+[...slug] → [[...slug]]
+```
+
+**Result**: Now `/docs` also works and triggers the default return statement
+
+## When to Use Each Approach
+
+### Simple `page.tsx` in docs folder
+- Use when page UI is always the same
+- Good for static content
+
+### Optional catchall `page.tsx` in `[[...slug]]` folder  
+- Use when page UI differs based on URL segments
+- Better for dynamic content based on URL structure
+
+## Route Matching Visualization
+- `localhost:3000` → renders `page.tsx` in app folder
+- Any URL containing `/docs` → renders `page.tsx` in slug folder (catchall segment)
+
+## Practical Use Cases
+- Documentation sites with nested categories
+- E-commerce with category/subcategory/product structure
+- Any site needing flexible URL structure with shared layouts
+- SEO-friendly URLs without creating hundreds of files
+# Next.js Custom 404 Page
+
+## Overview
+Learn how to create custom 404 pages in Next.js using the app router, including global 404 pages, section-specific pages, and programmatic triggering.
+
+## Default 404 Behavior
+- By default, visiting a non-existent route shows a basic 404 page
+- Example: `localhost:3000/building` shows default Next.js 404
+- Works fine for development but needs customization for production
+
+## Creating a Custom Global 404 Page
+
+### File Setup
+Create a file named `not-found.tsx` (or `not-found.js`) in your app folder:
+
+```
+app/
+  not-found.tsx
+```
+
+**Important**: File name must be exactly `not-found` (with hyphen) - this is a Next.js convention
+
+### Basic Implementation
+```typescript
+export default function NotFound() {
+  return (
+    <div>
+      <h2>Page Not Found</h2>
+      <p>Could not find requested resource</p>
+    </div>
+  )
+}
+```
+
+**Result**: Your custom 404 page now replaces the default Next.js 404 page automatically.
+
+## Programmatic 404 Triggering
+
+### Using the `notFound()` Function
+You can programmatically trigger a 404 page using Next.js's `notFound` function.
+
+**Example Scenario**: Product review system that should never have more than 1,000 reviews
+
+```typescript
+import { notFound } from 'next/navigation'
+
+export default function ReviewPage({ params }: { params: { reviewId: string } }) {
+  if (parseInt(params.reviewId) > 1000) {
+    notFound() // Triggers the 404 page
+  }
+  
+  // Rest of component logic
+}
+```
+
+## Section-Specific 404 Pages
+
+### Creating Nested 404 Pages
+You can create more specific 404 pages for different sections of your app:
+
+```
+app/
+  not-found.tsx          // Global 404
+  products/
+    [id]/
+      reviews/
+        [reviewId]/
+          not-found.tsx  // Section-specific 404
+          page.tsx
+```
+
+### Section-Specific Implementation
+```typescript
+// In reviews/[reviewId]/not-found.tsx
+export default function ReviewNotFound() {
+  return (
+    <div>
+      <h2>Review Not Found</h2>
+      <p>The requested review could not be found</p>
+    </div>
+  )
+}
+```
+
+**How it Works**: Next.js uses the most specific `not-found` page it can find:
+- `/products/1/reviews/101` → Uses section-specific 404 if exists
+- Falls back to global 404 if no specific one found
+
+## Adding Dynamic Content to 404 Pages
+
+### The Challenge
+- `notFound` component doesn't accept props
+- Need to show different messages based on route parameters
+
+### Solution: Using `usePathname` Hook
+
+```typescript
+'use client' // Required for client-side hooks
+
+import { usePathname } from 'next/navigation'
+
+export default function ReviewNotFound() {
+  const pathname = usePathname()
+  
+  // Extract route parameters from pathname
+  const productId = pathname.split('/')[2]  // Index 2 for product ID
+  const reviewId = pathname.split('/')[4]   // Index 4 for review ID
+  
+  return (
+    <div>
+      <h2>Review {reviewId} not found for product {productId}</h2>
+    </div>
+  )
+}
+```
+
+### Important Notes About Client Components
+- **Error**: "You're importing a component that needs usePathname"
+- **Solution**: Add `'use client'` directive at the top of the file
+- **Reason**: Hooks only work in client components, but Next.js components are server components by default
+
+## Key Concepts Summary
+
+### File Naming Convention
+- Must be exactly `not-found.tsx` or `not-found.js` 
+- Hyphen is required, not underscore or camelCase
+
+### Hierarchy and Specificity
+- Next.js automatically finds the most specific `not-found` page
+- Section-specific pages override global ones
+- Falls back to parent directory if no specific page found
+
+### Server vs Client Components
+- Default: All components are server components
+- Use `'use client'` when you need:
+  - React hooks (like `usePathname`)
+  - Browser APIs
+  - Interactive features
+
+### Programmatic Triggering
+- Use `notFound()` function for conditional 404s
+- Import from `'next/navigation'`
+- Useful for validation scenarios (ID ranges, permissions, etc.)
 
 
 
