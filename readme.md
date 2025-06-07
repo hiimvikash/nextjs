@@ -2845,6 +2845,13 @@ console.log('Navigating to:', destination)
 router.push(destination)
 ```
 
+---
+
+# 18. Loading.tsx file
+- This file handles the loading state of it's children routes.
+- exports a default function returning skeleton or spinner for particular route, this comes into action when that particular route is in loading state.
+- The placement of `loading.tsx` file plays important role.
+
 
 
 
