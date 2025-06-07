@@ -2979,6 +2979,142 @@ Think of error.tsx as a "safety net":
 - **Without error.tsx**: One broken component crashes the entire app (like a house of cards)
 - **With error.tsx**: Broken components are contained while the rest continues working (like having fire doors in a building)
 
+---
+
+# 20. Next.js Error Recovery with Reset Function
+
+## Error Recovery Overview
+While some errors are serious, others might be temporary and can be fixed with a simple retry mechanism. Next.js provides error recovery through the reset function in error boundaries.
+
+## Understanding Error Types
+- **Serious errors**: Require immediate attention and fixes
+- **Temporary errors**: Can often be resolved with a simple retry (network timeouts, temporary server issues)
+
+## Basic Reset Function Implementation
+
+### Error Boundary Props
+The error boundary in `error.tsx` provides two useful props:
+1. **error**: The error object containing error details
+2. **reset**: A function that returns void for retrying component rendering
+
+### Basic Implementation
+```javascript
+"use client";
+
+export default function ErrorBoundary({ error, reset }) {
+  return (
+    <div>
+      <p>{error.message}</p>
+      <button onClick={reset}>
+        Try again
+      </button>
+    </div>
+  );
+}
+```
+
+### Basic Reset Limitations
+- **Client-side only**: Simple reset only attempts client-side re-rendering
+- **Same error pattern**: If the underlying issue persists, the error will keep occurring
+- **Limited effectiveness**: Doesn't refresh server-side data or state
+
+## Advanced Server-Side Recovery
+
+### Required Imports
+```javascript
+import { useRouter } from 'next/navigation';
+import { startTransition } from 'react';
+```
+
+### Implementation Steps
+
+1. **Setup router hook:**
+```javascript
+const router = useRouter();
+```
+
+2. **Create reload function:**
+```javascript
+const reload = () => {
+  startTransition(() => {
+    router.refresh();
+    reset();
+  });
+};
+```
+
+```
+Use startTransition() when:
+
+You're doing a state update that is non-urgent.
+
+That update might cause slow rendering.
+
+You still want the app to stay responsive during that update.
+```
+
+3. **Update JSX:**
+```javascript
+<button onClick={reload}>
+  Try again
+</button>
+```
+
+### Complete Advanced Implementation
+```javascript
+"use client";
+
+import { useRouter } from 'next/navigation';
+import { startTransition } from 'react';
+
+export default function ErrorBoundary({ error, reset }) {
+  const router = useRouter();
+  
+  const reload = () => {
+    startTransition(() => {
+      router.refresh();
+      reset();
+    });
+  };
+
+  return (
+    <div>
+      <p>{error.message}</p>
+      <button onClick={reload}>
+        Try again
+      </button>
+    </div>
+  );
+}
+```
+
+## How Advanced Recovery Works
+
+### startTransition Purpose
+- **Deferred execution**: Ensures refresh is deferred until the next render phase
+- **State management**: Allows React to handle pending state updates before proceeding
+- **Non-blocking**: Prevents UI from freezing during the recovery process
+
+### router.refresh() Function
+- **Server-side refresh**: Refreshes the current route from the server
+- **Data refetch**: Fetches fresh data from server components
+- **Cache invalidation**: Clears any cached data that might be causing issues
+
+### Recovery Process
+1. User clicks "Try again" button
+2. `startTransition` wraps the recovery process
+3. `router.refresh()` fetches fresh data from server
+4. `reset()` attempts to re-render the component
+5. If successful, user sees the actual page content
+
+
+## Simple Explanation
+Think of error recovery like:
+- **Basic reset**: Like pressing "refresh" on a webpage that failed to load
+- **Advanced recovery**: Like clearing your browser cache AND refreshing - getting completely fresh data from the server
+
+The advanced approach gives you a better chance of recovery because it addresses both client-side and server-side issues.
+
 
 
 
