@@ -2289,6 +2289,273 @@ export default function AuthLayout({ children }) {
 
 ---
 
+# 16. Next.js Params and SearchParams - Complete Notes
+
+## Overview
+Two essential concepts for handling dynamic routing and query parameters in Next.js navigation.
+
+### Definitions
+- **params**: A promise that resolves to an object containing dynamic route parameters (like ID)
+- **searchParams**: A promise that resolves to an object containing query parameters (like filters and sorting)
+
+**URL Example**: `/articles/breaking-news-123?language=english`
+- `params`: `{ articleId: "breaking-news-123" }`
+- `searchParams`: `{ language: "english" }`
+
+## Setting Up Links with Params and SearchParams
+
+### Creating Navigation Links
+```javascript
+// Home component
+import Link from 'next/link'
+
+export default function Home() {
+  return (
+    <div>
+      <Link href="/articles/breaking-news-123?language=english">
+        Read in English
+      </Link>
+      
+      <Link href="/articles/breaking-news-123?language=fr">
+        Read in French
+      </Link>
+    </div>
+  )
+}
+```
+
+**URL Structure Breakdown:**
+- `/articles/` - base route
+- `breaking-news-123` - dynamic route parameter (articleId)
+- `?language=english` - query parameter (searchParams)
+
+## Route Setup
+
+### File Structure
+```
+app/
+  articles/
+    [articleId]/
+      page.tsx
+```
+
+### Basic Component Setup
+```javascript
+// app/articles/[articleId]/page.tsx
+import Link from 'next/link'
+
+export default function NewsArticle() {
+  return (
+    <div>
+      <h1>News Article: ID</h1>
+      <p>Reading in: language</p>
+      
+      <div>
+        <Link href="/articles/ID?language=english">English</Link>
+        <Link href="/articles/ID?language=spanish">Spanish</Link>
+        <Link href="/articles/ID?language=french">French</Link>
+      </div>
+    </div>
+  )
+}
+```
+
+## Accessing Params and SearchParams
+
+### Method 1: Server Components (Recommended)
+
+**Props Type Definition:**
+```javascript
+type Props = {
+  params: Promise<{ articleId: string }>
+  searchParams: Promise<{ language?: string }>
+}
+```
+
+**Implementation:**
+```javascript
+export default async function NewsArticle({ 
+  params, 
+  searchParams 
+}: Props) {
+  // Await the promises
+  const { articleId } = await params
+  const { language = 'english' } = await searchParams
+  
+  return (
+    <div>
+      <h1>News Article: {articleId}</h1>
+      <p>Reading in: {language}</p>
+      
+      <div>
+        <Link href={`/articles/${articleId}?language=english`}>English</Link>
+        <Link href={`/articles/${articleId}?language=spanish`}>Spanish</Link>
+        <Link href={`/articles/${articleId}?language=french`}>French</Link>
+      </div>
+    </div>
+  )
+}
+```
+
+**Key Points:**
+- Use `async/await` since params and searchParams are promises
+- Set default values for optional searchParams
+- Server components support async operations
+
+### Method 2: Client Components
+
+**❌ This Won't Work:**
+```javascript
+'use client'
+
+export default async function NewsArticle({ params, searchParams }) {
+  // Error: Client components don't support async/await
+  const { articleId } = await params
+}
+```
+
+**✅ Correct Approach:**
+```javascript
+'use client'
+import { use } from 'react'
+
+type Props = {
+  params: Promise<{ articleId: string }>
+  searchParams: Promise<{ language?: string }>
+}
+
+export default function NewsArticle({ params, searchParams }: Props) {
+  // Use the 'use' hook instead of async/await
+  const { articleId } = use(params)
+  const { language = 'english' } = use(searchParams)
+  
+  return (
+    <div>
+      <h1>News Article: {articleId}</h1>
+      <p>Reading in: {language}</p>
+      
+      <div>
+        <Link href={`/articles/${articleId}?language=english`}>English</Link>
+        <Link href={`/articles/${articleId}?language=spanish`}>Spanish</Link>
+        <Link href={`/articles/${articleId}?language=french`}>French</Link>
+      </div>
+    </div>
+  )
+}
+```
+
+
+
+## Important Limitations
+
+### Layout Components Restriction
+
+**✅ Available in layout.tsx:**
+- `params` - Dynamic route parameters
+
+**❌ NOT available in layout.tsx:**
+- `searchParams` - Query parameters
+
+**Example:**
+```javascript
+// app/articles/layout.tsx
+type Props = {
+  params: Promise<{ articleId: string }>
+  // searchParams is NOT available here
+}
+
+export default async function ArticleLayout({ 
+  params,
+  children 
+}: Props & { children: React.ReactNode }) {
+  const { articleId } = await params
+  // const { language } = await searchParams // ❌ This won't work
+  
+  return (
+    <div>
+      <h2>Article Section: {articleId}</h2>
+      {children}
+    </div>
+  )
+}
+```
+
+## Quick Reference
+
+| Component Type | Access Method | Example |
+|---------------|---------------|---------|
+| Server Component | `async/await` | `const { id } = await params` |
+| Client Component | `use()` hook | `const { id } = use(params)` |
+| Layout Component | `async/await` (params only) | `const { id } = await params` |
+
+## Common Use Cases
+
+### E-commerce Product Page
+```javascript
+// URL: /products/iphone-15?color=blue&storage=256gb
+type Props = {
+  params: Promise<{ productId: string }>
+  searchParams: Promise<{ 
+    color?: string
+    storage?: string
+    variant?: string
+  }>
+}
+```
+
+### Blog Post with Filters
+```javascript
+// URL: /blog/react-hooks?category=tutorial&difficulty=beginner
+type Props = {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ 
+    category?: string
+    difficulty?: string
+    tags?: string
+  }>
+}
+```
+
+### User Profile with Tabs
+```javascript
+// URL: /users/john-doe?tab=posts&sort=recent
+type Props = {
+  params: Promise<{ userId: string }>
+  searchParams: Promise<{ 
+    tab?: 'posts' | 'about' | 'followers'
+    sort?: 'recent' | 'popular' | 'oldest'
+  }>
+}
+```
+
+
+## Error Handling
+
+```javascript
+export default async function NewsArticle({ params, searchParams }: Props) {
+  try {
+    const { articleId } = await params
+    const { language = 'english' } = await searchParams
+    
+    // Validate articleId exists
+    if (!articleId) {
+      return <div>Article not found</div>
+    }
+    
+    return (
+      <div>
+        <h1>News Article: {articleId}</h1>
+        <p>Reading in: {language}</p>
+      </div>
+    )
+  } catch (error) {
+    return <div>Error loading article</div>
+  }
+}
+```
+
+---
+
 
 
 
