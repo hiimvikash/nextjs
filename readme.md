@@ -1,5 +1,5 @@
 
-# Next.js Tutorial Notes - Introduction & Overview
+# 1. Next.js 15 Notes - Introduction & Overview
 
 ## What is Next.js?
 
@@ -84,7 +84,7 @@ Next.js simplifies the process of building production-ready web applications by 
 - Should be familiar with core concepts
 - Solid foundation in React fundamentals is essential
 
-# React Server Components (RSC) - Fundamental Concepts
+# 2. React Server Components (RSC) - Fundamental Concepts
 
 ## What are React Server Components?
 
@@ -242,7 +242,7 @@ export default function Counter() {
 
 *This foundation knowledge is essential for understanding Next.js routing and component architecture.*
 
-# Next.js Routing Basics - File-Based Routing System
+# 3. Next.js Routing Basics - File-Based Routing System
 
 ## What is File-Based Routing?
 
@@ -401,7 +401,7 @@ export default function PageName() {
 
 *Next topics: Nested routes, dynamic routes, and advanced routing concepts*
 
-# Next.js Nested Routes - Building Complex URL Structures
+# 4. Next.js Nested Routes - Building Complex URL Structures
 
 ## What are Nested Routes?
 
@@ -632,7 +632,7 @@ export default function Electronics() {
 
 *Next topic: Dynamic routes for handling variable URL parameters*
 
-# Next.js Dynamic Routes - Building Flexible URL Patterns
+# 5. Next.js Dynamic Routes - Building Flexible URL Patterns
 
 ## What are Dynamic Routes?
 
@@ -954,7 +954,7 @@ export default async function ProductDetails({ params }: { params: Promise<{
 ---
 
 *Next topic: Nested dynamic routes and advanced routing patterns*
-# Nested Dynamic Routes in Next.js
+# 6. Nested Dynamic Routes in Next.js
 
 ## Overview
 Nested dynamic routes allow you to handle multiple dynamic segments in your URL paths. This is essential for real-world applications where you need complex routing structures.
@@ -1077,7 +1077,7 @@ export default async function ProductReview({
 - Each route can have its own metadata
 - Consider implementing proper loading and error states
 ---
-# Next.js Catchall Segments - YouTube Notes
+# Next.js Catchall Segments
 
 ## Overview
 Catchall segments are a powerful Next.js routing concept that allows you to handle multiple URL segments with a single file, perfect for documentation sites and complex routing scenarios.
@@ -1325,9 +1325,111 @@ export default function ReviewNotFound() {
 - Use `notFound()` function for conditional 404s
 - Import from `'next/navigation'`
 - Useful for validation scenarios (ID ranges, permissions, etc.)
+---
+<img width="692" alt="image" src="https://github.com/user-attachments/assets/2f42a207-2024-4e8b-9f78-cad3f11ab4db" />
 
+# Next.js Private Folders
 
+## Overview
+Learn about Next.js private folders - a feature that helps organize your project by excluding specific folders from the routing system.
 
+## What Are Private Folders?
+
+Private folders are a way to tell Next.js: "This folder is for internal stuff only - don't include it in the routing system."
+
+**Key Characteristics**:
+- The folder and **all its subfolders** are excluded from routing
+- Useful for organizing internal project files
+- Won't accidentally create unwanted routes
+
+## Creating Private Folders
+
+### Naming Convention
+Add an **underscore** (`_`) at the start of the folder name:
+
+```
+app/
+  _lib/           // Private folder
+    format-date.js
+    page.tsx
+  dashboard/      // Public folder
+    page.tsx
+```
+
+### Practical Example
+
+**Step 1**: Create a private folder
+```
+app/
+  _lib/
+    format-date.ts    // Utility function
+    page.tsx          // This won't be accessible as a route
+```
+
+**Step 2**: Add a page component inside
+```typescript
+// app/_lib/page.tsx
+export default function PrivateRoute() {
+  return <h1>You cannot view this in the browser</h1>
+}
+```
+
+**Step 3**: Test the behavior
+- Navigate to `localhost:3000/_lib`
+- **Result**: 404 error page (your custom 404 if you have one)
+- **Reason**: The underscore makes it a private folder, so Next.js won't create a route
+## Common Use Cases
+
+### Utility Functions
+```
+app/
+  _lib/
+    format-date.ts
+    api-helpers.ts
+    constants.ts
+```
+
+### Internal Components
+```
+app/
+  _components/
+    internal/
+      AdminPanel.tsx
+      DebugTools.tsx
+```
+
+### Development Tools
+```
+app/
+  _dev/
+    test-pages/
+    mock-data/
+    debug-components/
+```
+
+### Shared Resources
+```
+app/
+  _shared/
+    hooks/
+    types/
+    utils/
+```
+
+## Pro Tip: Actual Underscores in URLs
+
+If you actually want an underscore in your URL, use **URL encoding**:
+- Use `%5F` instead of `_`
+- `%5F` is the URL-encoded version of underscore
+
+**Example**:
+```
+app/
+  %5Flib/     // This WILL create a route at /lib
+    page.tsx
+```
+
+**Test**: Try changing `_lib` to `%5Flib` and see if the page becomes accessible in the browser.
 
 
 
