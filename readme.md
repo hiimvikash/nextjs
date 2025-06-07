@@ -117,9 +117,6 @@ A comprehensive guide to Next.js covering routing, components, error handling, a
 
 ---
 
-
----
-
 ## Quick Navigation
 
 | Topic | File | Description |
