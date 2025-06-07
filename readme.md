@@ -1077,7 +1077,7 @@ export default async function ProductReview({
 - Each route can have its own metadata
 - Consider implementing proper loading and error states
 ---
-# Next.js Catchall Segments
+# 7. Next.js Catchall Segments
 
 ## Overview
 Catchall segments are a powerful Next.js routing concept that allows you to handle multiple URL segments with a single file, perfect for documentation sites and complex routing scenarios.
@@ -1182,7 +1182,7 @@ The catchall route matches **any URL** with `/docs` in the path:
 - E-commerce with category/subcategory/product structure
 - Any site needing flexible URL structure with shared layouts
 - SEO-friendly URLs without creating hundreds of files
-# Next.js Custom 404 Page
+# 8. Next.js Custom 404 Page
 
 ## Overview
 Learn how to create custom 404 pages in Next.js using the app router, including global 404 pages, section-specific pages, and programmatic triggering.
@@ -1328,7 +1328,7 @@ export default function ReviewNotFound() {
 ---
 <img width="692" alt="image" src="https://github.com/user-attachments/assets/2f42a207-2024-4e8b-9f78-cad3f11ab4db" />
 
-# Next.js Private Folders
+# 9. Next.js Private Folders & Grouping folder
 
 ## Overview
 Learn about Next.js private folders - a feature that helps organize your project by excluding specific folders from the routing system.
@@ -1430,6 +1430,8 @@ app/
 ```
 
 **Test**: Try changing `_lib` to `%5Flib` and see if the page becomes accessible in the browser.
+<img width="245" alt="image" src="https://github.com/user-attachments/assets/e4962771-ef83-44db-bf05-9ba83c76e5c1" />
+
 
 
 
