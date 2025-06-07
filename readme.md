@@ -103,7 +103,7 @@ A comprehensive guide to Next.js covering routing, components, error handling, a
 
 ### Error Handling & Special Pages
 - [08. Custom 404 Page](./08.Custom404Page.md)
-- [18-19-20. Error Handling](./18_19_20Error.md)
+- [18-19-20-21. Error Handling](./18_19_20_21.Error.md)
 
 ### Advanced Routing Features
 - [09. Private Folder Grouping](./09.PrivateFolder_Grouping.md)
@@ -132,7 +132,7 @@ A comprehensive guide to Next.js covering routing, components, error handling, a
 | Layouts | [1011Layout.md](./1011Layout.md) | Shared UI components |
 | Metadata | [1213.Metadata.md](./1213.Metadata.md) | SEO and meta tags |
 | Navigation | [14_15_16_17.Navigation.md](./14_15_16_17.Navigation.md) | Navigation components |
-| Error Handling | [18_19_20Error.md](./18_19_20Error.md) | Error boundaries and recovery |
+| Error Handling | [18_19_20_21.Error.md](./18_19_20_21.Error.md) | Error boundaries and recovery |
 
 ---
 
