@@ -2852,6 +2852,133 @@ router.push(destination)
 - exports a default function returning skeleton or spinner for particular route, this comes into action when that particular route is in loading state.
 - The placement of `loading.tsx` file plays important role.
 
+---
+
+# 19. Next.js Error Handling with error.tsx 
+
+## Introduction to Error Handling
+Error handling is a crucial aspect of web applications, implemented in Next.js through a special file called `error.tsx`.
+
+## Current Application State
+- Working URL: `localhost:3000/products/1/reviews/1`
+- Shows the first review of the first product
+- Corresponds to `page.tsx` file in the review ID folder
+
+## Simulating Error Scenarios
+
+### Creating a Random Error Function
+```javascript
+// Outside component - utility function
+function getRandomInt(count) {
+  return Math.floor(Math.random() * count);
+}
+
+// Inside component
+const random = getRandomInt(2); // Returns 0 or 1
+if (random === 1) {
+  throw new Error("Error loading review");
+}
+```
+<img width="1433" alt="image" src="https://github.com/user-attachments/assets/93c9413f-10a4-4e73-ba7b-6b3cc420e61b" />
+
+
+### Error Behavior in Different Modes
+
+**Development Mode:**
+- Shows unhandled runtime error with custom message
+- Error message: "Error loading review"
+
+**Production Mode:**
+- Build: `npm run build`
+- Start: `npm run start`
+- Shows generic "Application error - A server side exception has occurred"
+- Actual error appears in terminal only
+
+### Problems with Unhandled Errors
+- Generic error messages aren't helpful to users
+- Error in deeply nested components breaks the **entire application**
+- Poor user experience
+
+## Solution: error.tsx File
+
+### Implementation Steps
+1. Create `error.tsx` file adjacent to `page.tsx` in the review ID folder
+2. Must be a **client component** (requires `"use client"` directive)
+3. Export default function that returns JSX
+
+```javascript
+"use client";
+
+export default function ErrorBoundary() {
+  return (
+    <div>
+      Error in review ID
+    </div>
+  );
+}
+```
+
+### Key Requirements
+- **Must be client components** - Add `"use client"` at the top
+- Acts as error boundary around the `page.tsx` file
+- Requires server restart after creation
+
+## Error Boundary Benefits
+
+### Graceful Error Handling
+- Only the affected component is replaced
+- Rest of the application continues working:
+  - Header remains functional
+  - Featured products from layout still display
+  - Footer stays intact
+- **Containment**: Errors are isolated to specific segments
+
+### Using Error Props
+Error component receives error object as prop:
+
+```javascript
+"use client";
+
+export default function ErrorBoundary({ error }) {
+  return (
+    <div>
+      {error.message}
+    </div>
+  );
+}
+```
+
+This displays the actual error message: "Error loading review"
+
+## Power of error.tsx in App Router
+
+### Automatic Error Boundaries
+- Automatically wraps route segments and nested children in React error boundary
+- Uses file system hierarchy for custom error UIs
+- Isolates errors to affected segments only
+
+## Component Hierarchy Overview
+
+The complete component hierarchy in Next.js App Router:
+
+1. **Layout Component** (top level)
+2. **Template Component**
+3. **Error Boundary** (from error.tsx) - for runtime errors
+4. **Suspense Boundary** (from loading.tsx)
+5. **Error Boundary** (from not-found.tsx) - for missing resources
+6. **Page Component** (bottom level)
+
+## Best Practices
+- Always style error components to match your application design
+- Use error.message for more informative error displays
+- Remember that error boundaries must be client components
+- Consider error boundaries at different levels of your application hierarchy
+
+## Simple Explanation
+Think of error.tsx as a "safety net":
+- **Without error.tsx**: One broken component crashes the entire app (like a house of cards)
+- **With error.tsx**: Broken components are contained while the rest continues working (like having fire doors in a building)
+
 
 
 
