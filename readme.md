@@ -1431,6 +1431,7 @@ app/
 
 **Test**: Try changing `_lib` to `%5Flib` and see if the page becomes accessible in the browser.
 <img width="245" alt="image" src="https://github.com/user-attachments/assets/e4962771-ef83-44db-bf05-9ba83c76e5c1" />
+Here `(auth)` is an organizational folder.
 
 
 
