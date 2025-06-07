@@ -2289,7 +2289,7 @@ export default function AuthLayout({ children }) {
 
 ---
 
-# 16. Next.js Params and SearchParams - Complete Notes
+# 16. Next.js Params and SearchParams
 
 ## Overview
 Two essential concepts for handling dynamic routing and query parameters in Next.js navigation.
@@ -2555,6 +2555,295 @@ export default async function NewsArticle({ params, searchParams }: Props) {
 ```
 
 ---
+
+# 17. Next.js Programmatic Navigation 
+
+## Overview
+Programmatic navigation allows you to redirect users automatically without them clicking a link. Essential for form submissions, authentication flows, and user experience improvements.
+
+**Real-world examples:**
+- Redirecting after form submission (order confirmation)
+- Authentication redirects (login → dashboard)
+- Error handling (404 → home page)
+
+## Two Main Approaches
+
+### 1. useRouter Hook (Client Components)
+### 2. redirect Function (Server Components)
+
+---
+
+## Method 1: useRouter Hook
+
+### Basic Setup
+
+**File Structure:**
+```
+app/
+  order-product/
+    page.tsx
+```
+
+**Basic Implementation:**
+```javascript
+'use client'
+import { useRouter } from 'next/navigation'
+
+export default function OrderProduct() {
+  const router = useRouter()
+  
+  const handleClick = () => {
+    console.log('Placing your order...')
+    // Simulate order processing
+    router.push('/')
+  }
+  
+  return (
+    <>
+      <h1>Order Product</h1>
+      <button onClick={handleClick}>
+        Place Order
+      </button>
+    </>
+  )
+}
+```
+
+**Key Requirements:**
+- Must use `'use client'` directive
+- Import from `'next/navigation'` (not `'next/router'`)
+- Only works in client components
+
+### useRouter Methods
+
+#### 1. router.push() - Navigate Forward
+```javascript
+const router = useRouter()
+
+// Navigate to different routes
+router.push('/')                    // Home page
+router.push('/products')            // Products page
+router.push('/products/123')        // Dynamic route
+router.push('/search?q=laptop')     // With query parameters
+```
+
+**Behavior**: Adds new entry to browser history (user can go back)
+
+#### 2. router.replace() - Replace Current Page
+```javascript
+const router = useRouter()
+
+router.replace('/login')
+```
+
+**Behavior**: Replaces current page in history (user can't go back to previous page)
+**Use case**: Login redirects, error corrections
+
+#### 3. router.back() - Go Back
+```javascript
+const router = useRouter()
+
+router.back()
+```
+
+**Behavior**: Same as browser's back button
+
+#### 4. router.forward() - Go Forward
+```javascript
+const router = useRouter()
+
+router.forward()
+```
+
+**Behavior**: Same as browser's forward button
+
+---
+
+## Method 2: redirect Function
+
+### Basic Setup
+
+**Use in Server Components:**
+```javascript
+import { redirect } from 'next/navigation'
+
+export default function ProductReview({ params, searchParams }) {
+  const { reviewId } = params
+  
+  // Redirect if invalid review ID
+  if (parseInt(reviewId) > 1000) {
+    redirect('/products')
+  }
+  
+  return (
+    <div>
+      <h1>Review #{reviewId}</h1>
+    </div>
+  )
+}
+```
+
+### Complete Example with Conditional Logic
+
+```javascript
+// app/products/[productId]/reviews/[reviewId]/page.tsx
+import { redirect } from 'next/navigation'
+
+type Props = {
+  params: Promise<{ 
+    productId: string
+    reviewId: string 
+  }>
+}
+
+export default async function ProductReview({ params }: Props) {
+  const { productId, reviewId } = await params
+  
+  // Validation logic
+  if (parseInt(reviewId) > 1000) {
+    // Redirect to products list instead of showing 404
+    redirect('/products')
+  }
+  
+  if (!productId || !reviewId) {
+    redirect('/products')
+  }
+  
+  return (
+    <div>
+      <h1>Product {productId} - Review #{reviewId}</h1>
+      <p>Review content goes here...</p>
+    </div>
+  )
+}
+```
+
+### Advanced redirect Examples
+
+#### Authentication Check
+```javascript
+import { redirect } from 'next/navigation'
+import { auth } from '@/lib/auth'
+
+export default async function Dashboard() {
+  const user = await auth.getCurrentUser()
+  
+  if (!user) {
+    redirect('/login')
+  }
+  
+  return <div>Welcome to Dashboard, {user.name}!</div>
+}
+```
+
+#### Role-based Redirects
+```javascript
+import { redirect } from 'next/navigation'
+
+export default async function AdminPanel({ params }) {
+  const user = await getCurrentUser()
+  
+  if (!user) {
+    redirect('/login')
+  }
+  
+  if (user.role !== 'admin') {
+    redirect('/unauthorized')
+  }
+  
+  return <div>Admin Panel</div>
+}
+```
+
+---
+
+## Comparison: useRouter vs redirect
+
+| Feature | useRouter Hook | redirect Function |
+|---------|----------------|-------------------|
+| **Component Type** | Client Components Only | Server Components Only |
+| **When Executes** | On user interaction | During render/load |
+| **Use Cases** | Form submissions, button clicks | Authentication, validation |
+| **Browser History** | Can control (push/replace) | Always replaces |
+| **Performance** | Client-side navigation | Server-side redirect |
+
+---
+
+## Best Practices
+
+### 1. Choose the Right Method
+- **useRouter**: User-triggered navigation (clicks, form submissions)
+- **redirect**: Automatic redirects (auth, validation, errors)
+
+### 2. Handle Loading States
+```javascript
+'use client'
+const [isNavigating, setIsNavigating] = useState(false)
+
+const handleNavigation = async () => {
+  setIsNavigating(true)
+  // Process...
+  router.push('/destination')
+}
+```
+
+### 3. Provide User Feedback
+```javascript
+const handleSubmit = async () => {
+  try {
+    await processOrder()
+    // Show success message before redirect
+    toast.success('Order placed successfully!')
+    setTimeout(() => router.push('/confirmation'), 1000)
+  } catch (error) {
+    toast.error('Failed to place order')
+  }
+}
+```
+
+### 4. Validate Before Navigation
+```javascript
+const handleNavigation = () => {
+  if (!isFormValid()) {
+    alert('Please fill all required fields')
+    return
+  }
+  
+  router.push('/next-step')
+}
+```
+
+### 5. Consider UX with replace vs push
+```javascript
+// Use replace for corrections (user shouldn't go back)
+router.replace('/corrected-url')
+
+// Use push for normal flow (user can go back)
+router.push('/next-page')
+```
+
+---
+
+## Troubleshooting
+
+### Common Errors:
+
+1. **"useRouter must be used in client component"**
+   - Solution: Add `'use client'` directive
+
+2. **"Cannot read properties of undefined (reading 'push')"**
+   - Solution: Ensure useRouter is called inside component, not at module level
+
+3. **"redirect is not a function"**
+   - Solution: Import from `'next/navigation'`, not `'next/router'`
+
+### Debug Tips:
+```javascript
+// Log navigation attempts
+const router = useRouter()
+console.log('Navigating to:', destination)
+router.push(destination)
+```
 
 
 
