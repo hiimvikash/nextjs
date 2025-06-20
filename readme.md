@@ -138,6 +138,114 @@ Next.js simplifies the process of building production-ready web applications by 
 
 ---
 
+
+
+# NextJS from official Docs
+
+# 📘 Next.js (App Router) - Complete Learning Path
+
+This guide will help you cover **all important topics and scenarios** in Next.js using the **App Router**, including both **Client** and **Server Components**.
+
+---
+
+## 🚀 Phase 1: Getting Started (Foundation)
+
+1. [Introduction to Next.js](https://nextjs.org/docs)
+2. [Routing: App Router Overview](https://nextjs.org/docs/app/building-your-application/routing)
+3. [Project Structure](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts)
+4. [Layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#layouts)
+5. [Pages](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#pages)
+6. [Nested Routes](https://nextjs.org/docs/app/building-your-application/routing/nested-routes)
+7. [Linking and Navigation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)
+
+---
+
+## ⚙️ Phase 2: Server vs Client Components
+
+8. [Rendering Overview](https://nextjs.org/docs/app/building-your-application/rendering)
+9. [Server Components](https://nextjs.org/docs/app/building-your-application/rendering/server-components)
+10. [Client Components](https://nextjs.org/docs/app/building-your-application/rendering/client-components)
+11. [When to Use Client Components](https://nextjs.org/docs/app/building-your-application/rendering/client-components#when-to-use-client-components)
+12. [Shared Components Between Server and Client](https://nextjs.org/docs/app/building-your-application/rendering/sharing-components)
+
+---
+
+## 🔌 Phase 3: Data Fetching
+
+13. [Data Fetching Overview](https://nextjs.org/docs/app/building-your-application/data-fetching)
+14. [Fetching Data on the Server (Server Components)](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching)
+15. [Loading UI & Suspense](https://nextjs.org/docs/app/building-your-application/routing/loading-ui)
+16. [Error Handling](https://nextjs.org/docs/app/building-your-application/routing/error-handling)
+17. [Using Third-Party APIs](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching#third-party-apis)
+
+---
+
+## 🌐 Phase 4: Advanced Routing Features
+
+18. [Dynamic Routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes)
+19. [Catch-all Routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#catch-all-segments)
+20. [Route Groups](https://nextjs.org/docs/app/building-your-application/routing/colocation#route-groups)
+21. [Intercepting Routes](https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes)
+22. [Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
+23. [Modals with Routes](https://nextjs.org/docs/app/building-your-application/routing/modals)
+
+---
+
+## 🧠 Phase 5: Forms, Actions & Mutations
+
+24. [Handling Forms](https://nextjs.org/docs/app/building-your-application/forms)
+25. [Server Actions (form-based mutations)](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions)
+26. [Client-side Forms](https://nextjs.org/docs/app/building-your-application/forms/client-components)
+
+---
+
+## 🔒 Phase 6: Authentication & Authorization
+
+27. [Authentication Patterns](https://nextjs.org/docs/app/building-your-application/authentication)
+28. [Using NextAuth.js](https://next-auth.js.org/getting-started/introduction)
+29. [Protecting Routes](https://nextjs.org/docs/app/building-your-application/authentication#protected-routes)
+
+---
+
+## 📦 Phase 7: API Routes and Middleware
+
+30. [API Routes (Pages Router only)](https://nextjs.org/docs/pages/building-your-application/api-routes)
+31. [Middleware](https://nextjs.org/docs/app/building-your-application/middleware)
+
+---
+
+## ⚡ Phase 8: Optimization & Performance
+
+32. [Streaming](https://nextjs.org/docs/app/building-your-application/rendering/streaming)
+33. [Image Optimization](https://nextjs.org/docs/app/building-your-application/optimizing/images)
+34. [Font Optimization](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
+35. [Caching](https://nextjs.org/docs/app/building-your-application/caching)
+36. [Preloading Data](https://nextjs.org/docs/app/building-your-application/data-fetching/preloading)
+
+---
+
+## 🧪 Phase 9: Testing & Deployment
+
+37. [Testing](https://nextjs.org/docs/pages/building-your-application/testing)
+38. [Deployment on Vercel](https://nextjs.org/docs/app/building-your-application/deploying)
+39. [Environment Variables](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables)
+
+---
+
+## 🔁 Bonus: Full Examples & Recipes
+
+- [Next.js App Router Examples](https://nextjs.org/examples?filters=app)
+- [Client Component Example](https://nextjs.org/docs/app/building-your-application/rendering/client-components#example)
+- [Server Component Example](https://nextjs.org/docs/app/building-your-application/rendering/server-components#example)
+
+---
+
+## ✅ Final Tip
+
+Go through the phases **in order** and build small projects along the way (e.g., dashboard, blog, auth app) to reinforce each concept.
+
+
+
 *Happy learning! 🚀*
 
 
